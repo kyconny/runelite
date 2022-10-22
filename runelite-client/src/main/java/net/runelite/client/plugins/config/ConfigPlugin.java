@@ -24,7 +24,10 @@
  */
 package net.runelite.client.plugins.config;
 
+import com.google.common.collect.ImmutableSet;
+import com.google.inject.Provides;
 import java.awt.image.BufferedImage;
+import java.util.Set;
 import javax.inject.Inject;
 import javax.inject.Provider;
 import javax.swing.SwingUtilities;
@@ -36,6 +39,16 @@ import net.runelite.client.eventbus.Subscribe;
 import net.runelite.client.events.OverlayMenuClicked;
 import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
+import net.runelite.client.plugins.config.configpanel.CheckBoxConfigTypeStrategy;
+import net.runelite.client.plugins.config.configpanel.ColorPickerConfigTypeStrategy;
+import net.runelite.client.plugins.config.configpanel.ComboBoxConfigTypeStrategy;
+import net.runelite.client.plugins.config.configpanel.ConfigTypeStrategy;
+import net.runelite.client.plugins.config.configpanel.DimensionConfigTypeStrategy;
+import net.runelite.client.plugins.config.configpanel.DoubleSpinnerConfigTypeStrategy;
+import net.runelite.client.plugins.config.configpanel.IntSpinnerConfigTypeStrategy;
+import net.runelite.client.plugins.config.configpanel.KeyBindConfigTypeStrategy;
+import net.runelite.client.plugins.config.configpanel.ListConfigTypeStrategy;
+import net.runelite.client.plugins.config.configpanel.TextFieldConfigTypeStrategy;
 import net.runelite.client.ui.ClientToolbar;
 import net.runelite.client.ui.NavigationButton;
 import net.runelite.client.ui.overlay.Overlay;
@@ -99,6 +112,32 @@ public class ConfigPlugin extends Plugin
 	protected void shutDown() throws Exception
 	{
 		clientToolbar.removeNavigation(navButton);
+	}
+
+	@Provides
+	public Set<ConfigTypeStrategy<?>> configTypeStrategies(
+		CheckBoxConfigTypeStrategy checkBoxConfigTypeStrategy,
+		ColorPickerConfigTypeStrategy colorPickerConfigTypeStrategy,
+		ComboBoxConfigTypeStrategy comboBoxConfigTypeStrategy,
+		DimensionConfigTypeStrategy dimensionConfigTypeStrategy,
+		DoubleSpinnerConfigTypeStrategy doubleSpinnerConfigTypeStrategy,
+		IntSpinnerConfigTypeStrategy intSpinnerConfigTypeStrategy,
+		KeyBindConfigTypeStrategy keyBindConfigTypeStrategy,
+		ListConfigTypeStrategy listConfigTypeStrategy,
+		TextFieldConfigTypeStrategy textFieldConfigTypeStrategy
+
+	) {
+		ImmutableSet.Builder<ConfigTypeStrategy<?>> strategyBuilder = ImmutableSet.builder();
+		strategyBuilder.add(checkBoxConfigTypeStrategy);
+		strategyBuilder.add(colorPickerConfigTypeStrategy);
+		strategyBuilder.add(comboBoxConfigTypeStrategy);
+		strategyBuilder.add(dimensionConfigTypeStrategy);
+		strategyBuilder.add(doubleSpinnerConfigTypeStrategy);
+		strategyBuilder.add(intSpinnerConfigTypeStrategy);
+		strategyBuilder.add(keyBindConfigTypeStrategy);
+		strategyBuilder.add(listConfigTypeStrategy);
+		strategyBuilder.add(textFieldConfigTypeStrategy);
+		return strategyBuilder.build();
 	}
 
 	@Subscribe

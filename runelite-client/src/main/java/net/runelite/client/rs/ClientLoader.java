@@ -136,7 +136,7 @@ public class ClientLoader implements Supplier<Applet>
 			ClassLoader classLoader;
 			try (FileChannel lockfile = FileChannel.open(LOCK_FILE.toPath(),
 				StandardOpenOption.CREATE, StandardOpenOption.READ, StandardOpenOption.WRITE);
-				FileLock flock = lockfile.lock())
+				 FileLock flock = lockfile.lock())
 			{
 				SplashScreen.stage(.05, null, "Downloading Old School RuneScape");
 				try
@@ -184,7 +184,7 @@ public class ClientLoader implements Supplier<Applet>
 			return e;
 		}
 		catch (IOException | ClassNotFoundException | InstantiationException | IllegalAccessException
-			| VerificationException | SecurityException e)
+			   | VerificationException | SecurityException e)
 		{
 			log.error("Error loading RS!", e);
 
@@ -487,7 +487,7 @@ public class ClientLoader implements Supplier<Applet>
 		}
 
 		try (HashingOutputStream hos = new HashingOutputStream(Hashing.sha512(), java.nio.file.Files.newOutputStream(PATCHED_CACHE.toPath()));
-			InputStream patch = ClientLoader.class.getResourceAsStream("/client.patch"))
+			 InputStream patch = ClientLoader.class.getResourceAsStream("/client.patch"))
 		{
 			new FileByFileV1DeltaApplier().applyDelta(VANILLA_CACHE, patch, hos);
 
