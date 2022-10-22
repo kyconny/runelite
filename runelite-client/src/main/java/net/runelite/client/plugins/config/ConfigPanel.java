@@ -258,9 +258,9 @@ class ConfigPanel extends PluginPanel
 		final Map<String, JPanel> sectionWidgets = new HashMap<>();
 		final Map<ConfigObject, JPanel> topLevelPanels = new TreeMap<>((a, b) ->
 			ComparisonChain.start()
-			.compare(a.position(), b.position())
-			.compare(a.name(), b.name())
-			.result());
+				.compare(a.position(), b.position())
+				.compare(a.name(), b.name())
+				.result());
 
 		for (ConfigSectionDescriptor csd : cd.getSections())
 		{
@@ -389,12 +389,14 @@ class ConfigPanel extends PluginPanel
 	}
 
 	@SuppressWarnings("unchecked")
-	private <T> void createComponent(Type type, ConfigDescriptor cd, ConfigItemDescriptor cid, JPanel item) {
+	private <T> void createComponent(Type type, ConfigDescriptor cd, ConfigItemDescriptor cid, JPanel item)
+	{
 		Optional<ConfigTypeStrategy<?>> maybeConfigTypeStrategy = configTypeStrategies.stream()
 			.filter(s -> s.appliesToType(type))
 			.findFirst();
 
-		if (!maybeConfigTypeStrategy.isPresent()) {
+		if (!maybeConfigTypeStrategy.isPresent())
+		{
 			log.error("Failed to find config strategy for type " + type + " skipping.");
 			return;
 		}
@@ -429,7 +431,7 @@ class ConfigPanel extends PluginPanel
 			}
 		}
 
-		configManager.setConfiguration(cd.getGroup().value(), cid.getItem().keyName(), value);
+		configManager.setConfiguration(cd.getGroup().value(), null, cid.getItem().keyName(), value, cid.getItem().saveToServer());
 	}
 
 	@Override

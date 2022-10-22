@@ -372,8 +372,8 @@ public class ConfigManager
 		File tempFile = File.createTempFile("runelite", null, parent);
 
 		try (FileOutputStream out = new FileOutputStream(tempFile);
-			FileChannel channel = out.getChannel();
-			OutputStreamWriter writer = new OutputStreamWriter(out, StandardCharsets.UTF_8))
+			 FileChannel channel = out.getChannel();
+			 OutputStreamWriter writer = new OutputStreamWriter(out, StandardCharsets.UTF_8))
 		{
 			channel.lock();
 			properties.store(writer, "RuneLite configuration");
@@ -505,6 +505,11 @@ public class ConfigManager
 
 	public void setConfiguration(String groupName, String profile, String key, @NonNull String value)
 	{
+		setConfiguration(groupName, profile, key, value, true);
+	}
+
+	public void setConfiguration(String groupName, String profile, String key, @NonNull String value, boolean saveToServer)
+	{
 		if (Strings.isNullOrEmpty(groupName) || Strings.isNullOrEmpty(key) || key.indexOf(':') != -1)
 		{
 			throw new IllegalArgumentException();
@@ -526,9 +531,12 @@ public class ConfigManager
 		log.debug("Setting configuration value for {} to {}", wholeKey, value);
 		handler.invalidate();
 
-		synchronized (pendingChanges)
+		if (saveToServer)
 		{
-			pendingChanges.put(wholeKey, value);
+			synchronized (pendingChanges)
+			{
+				pendingChanges.put(wholeKey, value);
+			}
 		}
 
 		ConfigChanged configChanged = new ConfigChanged();
@@ -541,9 +549,14 @@ public class ConfigManager
 		eventBus.post(configChanged);
 	}
 
+	public <T> void setConfiguration(String groupName, String profile, String key, T value, boolean saveToServer)
+	{
+		setConfiguration(groupName, profile, key, objectToString(value), saveToServer);
+	}
+
 	public <T> void setConfiguration(String groupName, String profile, String key, T value)
 	{
-		setConfiguration(groupName, profile, key, objectToString(value));
+		setConfiguration(groupName, profile, key, value, true);
 	}
 
 	public <T> void setConfiguration(String groupName, String key, T value)
