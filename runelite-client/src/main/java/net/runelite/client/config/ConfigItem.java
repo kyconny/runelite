@@ -50,4 +50,6 @@ public @interface ConfigItem
 	String section() default "";
 
 	boolean saveToServer() default true;
+
+	String[] supportedFileExtensions() default {};
 }

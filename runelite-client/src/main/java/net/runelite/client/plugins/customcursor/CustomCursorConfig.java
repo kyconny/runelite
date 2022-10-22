@@ -24,6 +24,8 @@
  */
 package net.runelite.client.plugins.customcursor;
 
+import java.io.File;
+import javax.annotation.Nullable;
 import net.runelite.client.config.Config;
 import net.runelite.client.config.ConfigGroup;
 import net.runelite.client.config.ConfigItem;
@@ -39,5 +41,16 @@ public interface CustomCursorConfig extends Config
 	default CustomCursor selectedCursor()
 	{
 		return CustomCursor.RS3_GOLD;
+	}
+
+	@ConfigItem(
+		keyName = "customCursorFilePath",
+		name = "Custom cursor file path",
+		description = "Select the path of the image you would like to use",
+		supportedFileExtensions = {"jpg", "png"}
+	)
+	default @Nullable File selectedFile()
+	{
+		return null;
 	}
 }

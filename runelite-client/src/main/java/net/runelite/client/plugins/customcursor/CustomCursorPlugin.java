@@ -36,7 +36,6 @@ import net.runelite.api.InventoryID;
 import net.runelite.api.Item;
 import net.runelite.api.ItemContainer;
 import net.runelite.api.events.ItemContainerChanged;
-import net.runelite.client.RuneLite;
 import net.runelite.client.callback.ClientThread;
 import net.runelite.client.config.ConfigManager;
 import net.runelite.client.eventbus.Subscribe;
@@ -54,8 +53,6 @@ import net.runelite.client.ui.ClientUI;
 @Slf4j
 public class CustomCursorPlugin extends Plugin
 {
-	private static final File CUSTOM_IMAGE_FILE = new File(RuneLite.RUNELITE_DIR, "cursor.png");
-
 	@Inject
 	private Client client;
 
@@ -92,10 +89,11 @@ public class CustomCursorPlugin extends Plugin
 	@Subscribe
 	public void onConfigChanged(ConfigChanged event)
 	{
-		if (event.getGroup().equals("customcursor") && event.getKey().equals("cursorStyle"))
-		{
-			updateCursor();
+		if (!event.getGroup().equals("customcursor")) {
+			return;
 		}
+
+		updateCursor();
 	}
 
 	@Subscribe
@@ -113,25 +111,25 @@ public class CustomCursorPlugin extends Plugin
 
 		if (selectedCursor == CustomCursor.CUSTOM_IMAGE)
 		{
-			if (CUSTOM_IMAGE_FILE.exists())
-			{
-				try
-				{
-					BufferedImage image;
-					synchronized (ImageIO.class)
-					{
-						image = ImageIO.read(CUSTOM_IMAGE_FILE);
-					}
-					clientUI.setCursor(image, selectedCursor.getName());
-				}
-				catch (Exception e)
-				{
-					log.error("error setting custom cursor", e);
-					clientUI.resetCursor();
-				}
+			File selectedFile = config.selectedFile();
+
+			if (selectedFile == null || !selectedFile.exists()) {
+				clientUI.resetCursor();
+				return;
 			}
-			else
+
+			try
 			{
+				BufferedImage image;
+				synchronized (ImageIO.class)
+				{
+					image = ImageIO.read(selectedFile);
+				}
+				clientUI.setCursor(image, selectedCursor.getName());
+			}
+			catch (Exception e)
+			{
+				log.error("error setting custom cursor", e);
 				clientUI.resetCursor();
 			}
 		}

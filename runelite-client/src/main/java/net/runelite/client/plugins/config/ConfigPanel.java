@@ -77,6 +77,7 @@ import net.runelite.client.plugins.config.configpanel.ComboBoxConfigTypeStrategy
 import net.runelite.client.plugins.config.configpanel.ConfigTypeStrategy;
 import net.runelite.client.plugins.config.configpanel.DimensionConfigTypeStrategy;
 import net.runelite.client.plugins.config.configpanel.DoubleSpinnerConfigTypeStrategy;
+import net.runelite.client.plugins.config.configpanel.FileChooserConfigTypeStrategy;
 import net.runelite.client.plugins.config.configpanel.IntSpinnerConfigTypeStrategy;
 import net.runelite.client.plugins.config.configpanel.KeyBindConfigTypeStrategy;
 import net.runelite.client.plugins.config.configpanel.ListConfigTypeStrategy;
@@ -135,7 +136,8 @@ class ConfigPanel extends PluginPanel
 						ColorPickerConfigTypeStrategy colorPickerConfigTypeStrategy, ComboBoxConfigTypeStrategy comboBoxConfigTypeStrategy,
 						DimensionConfigTypeStrategy dimensionConfigTypeStrategy, DoubleSpinnerConfigTypeStrategy doubleSpinnerConfigTypeStrategy,
 						IntSpinnerConfigTypeStrategy intSpinnerConfigTypeStrategy, KeyBindConfigTypeStrategy keyBindConfigTypeStrategy,
-						ListConfigTypeStrategy listConfigTypeStrategy, TextFieldConfigTypeStrategy textFieldConfigTypeStrategy)
+						ListConfigTypeStrategy listConfigTypeStrategy, TextFieldConfigTypeStrategy textFieldConfigTypeStrategy,
+						FileChooserConfigTypeStrategy fileChooserConfigTypeStrategy)
 	{
 		super(false);
 
@@ -154,6 +156,7 @@ class ConfigPanel extends PluginPanel
 		strategyBuilder.add(keyBindConfigTypeStrategy);
 		strategyBuilder.add(listConfigTypeStrategy);
 		strategyBuilder.add(textFieldConfigTypeStrategy);
+		strategyBuilder.add(fileChooserConfigTypeStrategy);
 		configTypeStrategies = strategyBuilder.build();
 
 		setLayout(new BorderLayout());

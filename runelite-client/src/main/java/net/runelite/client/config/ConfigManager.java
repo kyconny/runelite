@@ -867,6 +867,10 @@ public class ConfigManager
 				return gson.fromJson(str, parameterizedType);
 			}
 		}
+		if (type == File.class)
+		{
+			return new File(str);
+		}
 		return str;
 	}
 
@@ -921,6 +925,10 @@ public class ConfigManager
 		if (object instanceof Set)
 		{
 			return gson.toJson(object, Set.class);
+		}
+		if (object instanceof File)
+		{
+			return ((File) object).getAbsolutePath();
 		}
 		return object == null ? null : object.toString();
 	}
